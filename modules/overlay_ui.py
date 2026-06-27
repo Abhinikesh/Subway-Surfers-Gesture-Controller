@@ -53,7 +53,6 @@ class OverlayUI:
     def draw(self, frame, gesture, confidence, stats, fps):
         color = GESTURE_COLORS.get(gesture, (74,111,100))
 
-        # Top bar
         self._dark_bar(frame, 0, 52)
         cv2.putText(frame, "SUBWAY SURFERS",
                     (12, 36), cv2.FONT_HERSHEY_SIMPLEX,
@@ -65,10 +64,8 @@ class OverlayUI:
         cv2.putText(frame, f"FPS {int(fps)}", (self.w-80, 36),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.55, (74,111,100), 1)
 
-        # Bottom bar
         self._dark_bar(frame, self.h-105, 105)
 
-        # Confidence bar
         bx, by, bw = 12, self.h-92, 200
         cv2.putText(frame, f"Confidence: {int(confidence*100)}%",
                     (bx, by-5), cv2.FONT_HERSHEY_SIMPLEX,
@@ -78,7 +75,6 @@ class OverlayUI:
         if fill > 0:
             cv2.rectangle(frame, (bx,by), (bx+fill,by+8), color, -1)
 
-        # Stats
         cv2.putText(frame, f"Jumps:{stats.jumps}",
                     (12, self.h-65), cv2.FONT_HERSHEY_SIMPLEX,
                     0.48, (0,255,136), 1)
@@ -98,7 +94,6 @@ class OverlayUI:
                     (200, self.h-38), cv2.FONT_HERSHEY_SIMPLEX,
                     0.48, (0,200,255), 1)
 
-        # Gesture hints bottom
         hints = [
             ("Both UP=JUMP",     "JUMP"),
             ("Left side=LEFT",   "LEFT"),

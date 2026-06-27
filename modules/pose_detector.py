@@ -47,7 +47,6 @@ class PoseDetector:
         self.landmarker = mp_vision.PoseLandmarker.create_from_options(options)
 
     def process(self, frame: np.ndarray) -> Optional[PoseResult]:
-        # Resize to 320x240 for speed before sending to MediaPipe
         small = cv2.resize(frame, (320, 240))
         rgb   = cv2.cvtColor(small, cv2.COLOR_BGR2RGB)
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb)

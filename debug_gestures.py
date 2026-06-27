@@ -33,7 +33,6 @@ while True:
             shoulder_w = abs(r_shoulder.x - l_shoulder.x)
             shoulder_y = (l_shoulder.y + r_shoulder.y) / 2
 
-            # Key values for LEFT detection
             l_out_dist = l_shoulder.x - l_wrist.x
             r_out_dist = r_wrist.x - r_shoulder.x
             needed     = shoulder_w * 0.3
@@ -45,7 +44,6 @@ while True:
                   f"R_wrist_y={r_wrist.y:.3f} | "
                   f"shoulder_y={shoulder_y:.3f}")
 
-        # Show values on screen too
         cv2.putText(frame, "Extend arm SIDEWAYS and watch terminal",
                     (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0,245,255), 1)
 

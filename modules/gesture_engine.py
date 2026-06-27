@@ -36,12 +36,10 @@ class GestureEngine:
         l_wrist_rel_y = l_wrist.y - l_shoulder.y
         r_wrist_rel_y = r_wrist.y - r_shoulder.y
 
-        # ── JUMP: both wrists above both shoulders ────────────
         if (l_wrist_rel_y < -config.JUMP_THRESHOLD and
             r_wrist_rel_y < -config.JUMP_THRESHOLD):
             return "JUMP"
 
-        # ── SLIDE: both hands joined near stomach ─────────────
         wrist_dist_x     = abs(l_wrist.x - r_wrist.x)
         wrist_dist_y     = abs(l_wrist.y - r_wrist.y)
         both_low         = (l_wrist.y > shoulder_y + 0.08 and
@@ -51,36 +49,23 @@ class GestureEngine:
             both_low):
             return "SLIDE"
 
-        # ── From debug data analysis: ──────────────────────────
-        # When LEFT arm extends sideways:  L_out is POSITIVE ~0.2+
-        # When RIGHT arm extends sideways: R_out is POSITIVE ~0.13+
-        # L_out = l_shoulder.x - l_wrist.x  (positive = wrist LEFT of shoulder)
-        # R_out = r_wrist.x - r_shoulder.x  (positive = wrist RIGHT of shoulder)
-        # Camera is flipped so LEFT gesture = right keypress and vice versa
-        # We correct this by swapping LEFT/RIGHT keys in keyboard_controller
+        l_out = l_shoulder.x - l_wrist.x
+        r_out = r_wrist.x - r_shoulder.x
 
-        l_out = l_shoulder.x - l_wrist.x   # positive when arm extends left
-        r_out = r_wrist.x - r_shoulder.x   # positive when arm extends right
+        threshold = shoulder_w * 0.5
 
-        threshold = shoulder_w * 0.5        # ~0.12-0.19 based on debug data
-
-        # Wrist at mid-body height (not too high, not too low)
         l_mid = shoulder_y - 0.2 < l_wrist.y < shoulder_y + 0.35
         r_mid = shoulder_y - 0.2 < r_wrist.y < shoulder_y + 0.35
 
-        # Opposite hand relaxed (not also extended)
         r_relaxed = r_out < threshold * 0.5
         l_relaxed = l_out < threshold * 0.5
 
-        # ── LEFT: left arm extends sideways ───────────────────
         if (l_out > threshold and l_mid and r_relaxed):
             return "LEFT"
 
-        # ── RIGHT: right arm extends sideways ─────────────────
         if (r_out > threshold and r_mid and l_relaxed):
             return "RIGHT"
 
-        # ── SHIELD: both wrists crossed at chest ──────────────
         chest_top = shoulder_y - 0.05
         chest_bot = shoulder_y + 0.25
         l_in_chest = chest_top < l_wrist.y < chest_bot
